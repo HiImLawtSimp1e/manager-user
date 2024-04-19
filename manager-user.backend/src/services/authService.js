@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { Op, where } from "sequelize";
 
 import dbContext from "../models/index";
 
@@ -31,8 +32,8 @@ const hashUserPassword = (userPassword) => {
   return hash;
 };
 
-const checkPassword = (pass, hashPassword) => {
-  return bcrypt.compareSync("B4c0//", hash);
+const checkPassword = (password, hashPassword) => {
+  return bcrypt.compareSync(password, hashPassword);
 };
 
 const registerUser = async (rawUserData) => {
@@ -69,11 +70,43 @@ const registerUser = async (rawUserData) => {
   }
 };
 
-const loginUser = async (rawData) => {
+const loginUser = async (rawUserData) => {
   try {
-    console.log(rawData);
+    console.log(rawUserData);
+    let user = await dbContext.User.findOne({
+      where: {
+        [Op.or]: [
+          { email: rawUserData.account },
+          { phone: rawUserData.account },
+        ],
+      },
+    });
+    if (!user) {
+      console.log("Not found user with account:", rawUserData.account);
+      return {
+        message: "Your account or your password is incorrect",
+        errorCode: -1,
+      };
+    }
+    console.log("check user:", user.get({ plain: true }));
+    let isCorrectPassword = checkPassword(rawUserData.password, user.password);
+    if (!isCorrectPassword) {
+      console.log(
+        "User password is not correct, account =",
+        rawUserData.account,
+        " ,password =",
+        rawUserData.password,
+        " ,hashPassword =",
+        user.password
+      );
+      return {
+        message: "Your account or your password is incorrect",
+        errorCode: -1,
+      };
+    }
+    console.log("Login successfully");
     return {
-      message: "waiting to tomorrow",
+      message: "Login successfully",
       errorCode: 0,
     };
   } catch (e) {
@@ -87,4 +120,5 @@ const loginUser = async (rawData) => {
 
 module.exports = {
   registerUser,
+  loginUser,
 };

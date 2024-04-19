@@ -7,6 +7,7 @@ import Home from "./Components/Home/Home";
 import About from "./Components/About/About";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
+import User from "./Components/User/User";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/user" element={<User />}></Route>
       </Routes>
       <ToastContainer
         position="top-right"

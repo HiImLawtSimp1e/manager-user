@@ -29,7 +29,19 @@ const Login = () => {
       toast.error("Please enter your password");
       return false;
     }
-    await LoginUserService(account, password);
+    let response = await LoginUserService(account, password);
+    let serverData = response.data;
+    if (+serverData.errorCode === 0) {
+      let data = {
+        isAuthenticated: true,
+        token: "fake token",
+      };
+      sessionStorage.setItem("account", JSON.stringify(data));
+      toast.success(serverData.message);
+      navigate("/user");
+    } else {
+      toast.error(serverData.message);
+    }
   };
 
   const navigateToCreateAccount = () => {
