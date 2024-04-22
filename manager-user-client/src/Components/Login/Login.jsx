@@ -1,6 +1,6 @@
 import "./Login.scss";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -8,7 +8,15 @@ import { toast } from "react-toastify";
 import { LoginUserService } from "../../Serivces/userService";
 
 const Login = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAuthenticated = sessionStorage.getItem("account");
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  });
+
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const defaultValidInput = {

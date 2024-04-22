@@ -1,25 +1,19 @@
 import "./App.scss";
-import { Routes, Route } from "react-router-dom";
+
 import { ToastContainer } from "react-toastify";
 
 import NavLayout from "./Components/Navigation/NavLayout";
-import Home from "./Components/Home/Home";
-import About from "./Components/About/About";
-import Login from "./Components/Login/Login";
-import Register from "./Components/Register/Register";
-import User from "./Components/User/User";
+import AppRoutes from "./Routes/AppRoutes";
 
 function App() {
   return (
     <div className="App">
-      <NavLayout />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/user" element={<User />}></Route>
-      </Routes>
+      <div className="App-header">
+        <NavLayout />
+      </div>
+      <div className="App-container">
+        <AppRoutes />
+      </div>
       <ToastContainer
         position="top-right"
         autoClose={1800}
